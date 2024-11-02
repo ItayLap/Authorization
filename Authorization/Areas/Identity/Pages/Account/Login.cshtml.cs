@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
 
-namespace Authorization.Areas.Identity.Pages.Accaunt
+namespace Authorization.Areas.Identity.Pages.Account
 {
 	public class LoginModel : PageModel
 	{
@@ -34,6 +34,7 @@ namespace Authorization.Areas.Identity.Pages.Accaunt
 			[Display(Name = "Remember me?")]
 			public bool RememberMe { get; set; }
 		}
+
 		public async Task OnGetAsync(string returnUrl = null)
 		{
 			if (!string.IsNullOrEmpty(ErrorMessage))

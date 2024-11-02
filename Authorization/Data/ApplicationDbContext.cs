@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Authorization.Data
 {
-    public class ApplicationDbContext:IdentityDbContext<ApplicationUserModel>
+    public class ApplicationDbContext   :   IdentityDbContext<ApplicationUserModel>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) 
             : base(options)

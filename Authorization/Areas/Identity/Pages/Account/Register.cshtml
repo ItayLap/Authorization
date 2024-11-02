@@ -8,7 +8,7 @@
 	<div class="row">
 		<div class="col-md-4">
 			<section>
-				<form action="/" method="post">
+				<form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" action="/" method="post">
 					<h2>Use local account to log in</h2>
 					<hr />
 					<div asp-validation-summary="ModelOnly" action="text-danger" role="alert"></div>
@@ -27,12 +27,7 @@
 						<label asp-for="Input.ConfirmPassword" class="form-label">Confirm Password</label>
 						<span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
 					</div>
-					<div class="checkbox mb-3">
-						<label asp-for="Input.RememberMe" class="form-label">
-							<input class="form-check-input" asp-for="Input.RememberMe" />
-							@Html.DisplayNameFor(m => m.Input.RememberMe)
-						</label>
-					</div>
+					<button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
 				</form>
 			</section>
 		</div>

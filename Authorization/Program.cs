@@ -5,22 +5,23 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddRazorPages();
-
-var app = builder.Build();
-
+// Получаем строку подключения
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
+// Регистрируем ApplicationDbContext с использованием строки подключения
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
+// Добавляем сервисы аутентификации и авторизации
 builder.Services.AddDefaultIdentity<ApplicationUserModel>(options =>
-options.SignIn.RequireConfirmedAccount = true)
-    .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+{
+    options.SignIn.RequireConfirmedAccount = true;
+})
+.AddRoles<IdentityRole>()
+.AddEntityFrameworkStores<ApplicationDbContext>()
+.AddDefaultTokenProviders();
 
 builder.Services.AddAuthorization(options =>
 {
@@ -42,16 +43,20 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Lockout.AllowedForNewUsers = true;
 
     options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-
 });
 
+// Добавляем реализацию для IEmailSender
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 
-// Configure the HTTP request pipeline.
+// Добавляем поддержку Razor Pages
+builder.Services.AddRazorPages();
+
+var app = builder.Build();
+
+// Настройка HTTP-конвейера
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -60,6 +65,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication(); // Добавляем аутентификацию
 app.UseAuthorization();
 
 app.MapRazorPages();
