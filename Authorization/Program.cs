@@ -53,6 +53,23 @@ builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        await DbInitializer.Initialize(services);
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogInformation("Database Initialiezed successfully");
+    }
+    catch(Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "Error while seeding the database");
+    }
+
+}
+
 // Настройка HTTP-конвейера
 if (!app.Environment.IsDevelopment())
 {
@@ -70,4 +87,54 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 
+
+
 app.Run();
+
+public static class DbInitializer
+{
+    public static async Task Initialize(IServiceProvider serviceProvider)
+    {
+        using var scope = serviceProvider.CreateScope();
+        {
+            var services = scope.ServiceProvider;
+
+            var context = services.GetRequiredService<ApplicationDbContext>();
+            var userManager = services.GetRequiredService<UserManager<ApplicationUserModel>>();
+            var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
+            context.Database.Migrate();
+
+            var roles = new[] { "Admin", "Moderator", "User" };
+            foreach (var role in roles)
+            {
+                if (!await roleManager.RoleExistsAsync(role))
+                {
+                    await roleManager.CreateAsync(new IdentityRole(role));
+                }
+            }
+
+            var adminEmail = "adminExample@gmail.com";
+            var adminUser = await userManager.FindByEmailAsync(adminEmail);
+
+            if (adminUser != null)
+            {
+                adminUser = new ApplicationUserModel
+                {
+                    UserName = adminEmail,
+                    Email = adminUser.Email,
+                    EmailConfirmed = true,
+                    FirstName = "Admin",
+                    LastName = "User",
+                    DateOfBirth = new DateTime(1000, 1, 1) // Esle shto nada paminyat
+                };
+
+                var result = await userManager.CreateAsync(adminUser, "Admin123!@#");
+                if (result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(adminUser, "Admin");
+                }
+            }
+        }
+    }
+}

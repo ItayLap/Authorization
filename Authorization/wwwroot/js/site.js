@@ -3,5 +3,33 @@
 // Write your JavaScript code.
 
 $(document).ready(function () {
-    $("#registerForm").submit(function (event) { })
+    $("#registerForm").validate({
+        rules: {
+            "Input.Email": {
+                required: true,
+                email: true
+
+            }, "Input.Password": {
+                required: true,
+                minlength: 8,
+                passwordComplexity: true
+
+            }, "Input.ConfirmPassword": {
+                required: true,
+                equalTo: "#Input_Password"
+
+            }, "Input.FirstName": {
+                required: true,
+                minlength: 2,
+
+            }, "Input.LastName": {
+                required: true,
+                minlength: 2,
+
+            }, "Input.DateOfBirth": {
+                required: true,
+                minimumAge: 13
+            }
+        }
+    })
 })
