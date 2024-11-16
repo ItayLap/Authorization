@@ -45,7 +45,7 @@ namespace Authorization.Areas.Identity.Pages.Account
 			returnUrl ??= Url.Content("~/");
 
 			await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
-			ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+			ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();/*sdfsdf*/
 
 			ReturnUrl = returnUrl;
 		}

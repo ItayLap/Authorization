@@ -7,4 +7,22 @@
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <div class="mt-4">
+            <h2>Welcome, @User.Identity.Name!</h2>
+            @if (User.IsInRole("Admin"))
+            {
+                <p>you logged as an administrator.</p>
+            }
+            else if (User.IsInRole("Moderator"))
+            {
+                <p>You are logged in as a moderator</p>
+            }
+            else
+            {
+                <p>regular log in.</p>
+            }
+        </div>
+    }
 </div>

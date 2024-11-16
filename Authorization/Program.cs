@@ -17,7 +17,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // Добавляем сервисы аутентификации и авторизации
 builder.Services.AddDefaultIdentity<ApplicationUserModel>(options =>
 {
-    options.SignIn.RequireConfirmedAccount = true;
+    options.SignIn.RequireConfirmedAccount = false; // отключаем отребование подтверждения
+    options.SignIn.RequireConfirmedEmail = false;
 })
 .AddRoles<IdentityRole>()
 .AddEntityFrameworkStores<ApplicationDbContext>()

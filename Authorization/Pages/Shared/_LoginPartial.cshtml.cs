@@ -3,10 +3,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Authorization.Pages.Shared
 {
-    public class _LoginModel : PageModel
+    public class _LoginPartialModel
     {
-        public void OnGet()
-        {
-        }
+        public string ReturnUrl { get; set; }
     }
 }

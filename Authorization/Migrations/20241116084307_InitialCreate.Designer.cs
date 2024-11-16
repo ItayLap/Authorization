@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Authorization.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241026074810_InitialCreate")]
+    [Migration("20241116084307_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -49,11 +49,13 @@ namespace Authorization.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");

@@ -84,20 +84,50 @@ namespace Authorization.Areas.Identity.Pages.Account
 		{
 			// if returnUrl == null then set returnUrl = Url.Content("~/");
 			returnUrl ??= Url.Content("~/");
+			_logger.LogInformation("starting registration");
 
-			ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+			//ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 			if (ModelState.IsValid)
 			{
 				/*
+				var user = CreateUser();
+				
 				user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
 				user.DateOfBirth = Input.DateOfBirth;
 				*/
+				var user = new ApplicationUserModel
+				{
+					UserName = Input.Email,
+					Email = Input.Email,
+					DateOfBirth = DateTime.Now,
+					EmailConfirmed = true
+				};
+				_logger.LogInformation("Attempting to create user:{Email}", Input.Email);
 
+				/*
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
 				await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+				*/
 				var result = await _userManager.CreateAsync(user, Input.Password);
 
+				if (result.Succeeded)
+				{
+					_logger.LogInformation("User created successfuly");
+
+					await _userManager.AddToRoleAsync(user, "User");
+					await _signInManager.SignInAsync(user, isPersistent: false);
+					return LocalRedirect(returnUrl);
+
+				}// Nado Dapisat
+                foreach (var error in result.Errors )
+                {
+					ModelState.AddModelError(String.Empty, error.Description);
+                }
+            }
+
+				
+				/*
 				if (result.Succeeded)
 				{
 					var UserId = await _userManager.GetUserIdAsync(user);
@@ -131,6 +161,7 @@ namespace Authorization.Areas.Identity.Pages.Account
 					ModelState.AddModelError(string.Empty, error.Description);
 				}
 			}
+				*/
 			return Page();
 		}
 
