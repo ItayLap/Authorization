@@ -88,7 +88,6 @@ namespace Authorization.Areas.Identity.Pages.Account
 			ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 			if (ModelState.IsValid)
 			{
-				var user = CreateUser();
 				/*
 				user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
