@@ -101,8 +101,11 @@ namespace Authorization.Areas.Identity.Pages.Account
 					UserName = Input.Email,
 					Email = Input.Email,
 					DateOfBirth = DateTime.Now,
-					EmailConfirmed = true
-				};
+					EmailConfirmed = true,
+					FirstName = "User",
+					LastName  = "Test"
+
+                };
 				_logger.LogInformation("Attempting to create user:{Email}", Input.Email);
 
 				/*

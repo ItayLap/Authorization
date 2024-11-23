@@ -1,35 +1,41 @@
 ﻿@page
 @model Authorization.Areas.Identity.Pages.Account.RegisterModel
 @{
-	ViewData["Title"] = "Register";
+    ViewData["Title"] = "Register";
 }
 <h1>@ViewData["Title"]</h1>
+
 <div class="row">
-	<div class="row">
-		<div class="col-md-4">
-			<section>
-				<form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" action="/" method="post">
-					<h2>Use local account to log in</h2>
-					<hr />
-					<div asp-validation-summary="ModelOnly" action="text-danger" role="alert"></div>
-					<div class="form-floating mb-3">
-						<input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="example@gmail.com" />
-						<label asp-for="Input.Email" class="form-label">Email</label>
-						<span asp-validation-for="Input.Email" class="text-danger"></span>
-					</div>
-					<div class="form-floating mb-3">
-						<input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="12!Password!43" />
-						<label asp-for="Input.Password" class="form-label">Password</label>
-						<span asp-validation-for="Input.Password" class="text-danger"></span>
-					</div>
-					<div class="form-floating mb-3">
-						<input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="current-password" aria-required="true" placeholder="12!Password!43" />
-						<label asp-for="Input.ConfirmPassword" class="form-label">Confirm Password</label>
-						<span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-					</div>
-					<button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
-				</form>
-			</section>
-		</div>
-	</div>
+    <div class="col-md-4">
+        <form id="registerForm" asp-page="./Register" method="post">
+            <h2>Create a new account</h2>
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Email" class="form-control" />
+                <label asp-for="Input.Email">Email</label>
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Password" class="form-control" type="password" />
+                <label asp-for="Input.Password">Password</label>
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input asp-for="Input.ConfirmPassword" class="form-control" type="password" />
+                <label asp-for="Input.ConfirmPassword">Confirm Password</label>
+                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            </div>
+
+            @Html.AntiForgeryToken()
+            <button type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+        </form>
+    </div>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
